@@ -1,34 +1,12 @@
 [
   {
     "locationId": 1,
-    "name": "Aston Martin"
+    "name": "Aston Martin",
+    "cabType": "normal" 
   },
   {
-    "locationId": 1,
-    "name": "Audi"
-  },
-  {
-    "locationId": 1,
-    "name": "BMW"
-  },
-  {
-    "locationId": 1,
-    "name": "Cadillac"
-  },
-  {
-    "locationId": 1,
-    "name": "Chevrolet"
-  },
-  {
-    "locationId": 1,
-    "name": "Datsun"
-  },
-  {
-    "locationId": 1,
-    "name": "Ferrari"
-  },
-  {
-    "locationId": 1,
-    "name": "Ford"
+    "locationId": 2,
+    "name": "Audi",
+    "cabType": "premium"
   }
 ]

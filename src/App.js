@@ -1,119 +1,118 @@
 import React, { Component } from 'react'
 import Select from 'react-select'
 import 'bootstrap/dist/css/bootstrap.min.css';
-import { Container, Row, Col, Button, InputGroup, FormControl, ListGroup } from 'react-bootstrap';
-import SelectSearch from 'react-select-search';
+import { Container, Row, Col, Button, ListGroup } from 'react-bootstrap';
 import transform from './utils/transform';
 
-import CreatableSelect from 'react-select/creatable';
 import AsyncSelect from 'react-select/async';
 
 
 const url = 'http://localhost:3100';
 
-const colourOptions = [
-  { value: 'premium', label: 'Premium' },
-  { value: 'normal', label: 'Normal' },
-]
 const filter = [
   { value: 'premium', label: 'Premium' },
   { value: 'normal', label: 'Normal' },
 ]
 
-const handleChange = (newValue, actionMeta) => {
-  console.group('Value Changed');
-  console.log(newValue);
-  console.log(`action: ${actionMeta.action}`);
-  console.groupEnd();
-};
-const handleInputChange = (inputValue, actionMeta) => {
-  console.group('Input Changed');
-  console.log(inputValue);
-  console.log(`action: ${actionMeta.action}`);
-  console.groupEnd();
-};
-
-
-const filterColors = (inputValue) => {
-  return colourOptions.filter(i =>
-    i.label.toLowerCase().includes(inputValue.toLowerCase())
-  );
-};
-
-const loadOptions = (inputValue, callback) => {
-  setTimeout(() => {
-    callback(filterColors(inputValue));
-  }, 1000);
-};
-
-
 class Cabs extends React.Component {
   constructor() {
     super(...arguments);
-    this.state = {locations: [], inputValue: ''}; 
+    this.state = {locations: [], inputValue: '', cabList: [], selectedLocation: null, selectedType: null}; 
   }
   componentDidMount() {
     this.init();
   }
   init() {
-    this.location();
+    this.get();
   }
-  location(name) {
-    fetch(`${url}/search/${name || 'all'}`)
-    .then((resp) => resp.json()) // Transform the data into json
+  get() {
+    fetch(url)
+    .then((resp) => resp.json())
     .then((res)=> {
         this.setState({
-          locations: transform(res.data),
+          cabList: [...res.data],
         })
-      // Create and append the li's to the ul
       });
   }
-  handleInputChange = (newValue) => {
-    const inputValue = newValue.replace(/\W/g, '');
-    this.setState({ inputValue });
-    return inputValue;
+  changeLocation = (selectedLocation) => {
+    this.setState({ selectedLocation });
+    return selectedLocation;
   };
+  changeType = selectedType => {
+    this.setState({ selectedType });
+    return selectedType;
+  };
+  loadOptions = (inputValue, callback) => {
+    fetch(`${url}/location/${inputValue || 'all'}`)
+    .then((resp) => resp.json())
+    .then((res)=> {
+        callback(transform(res.data));
+      });
+  };
+  search() {
+    const { selectedLocation , selectedType } = this.state;
+    if(selectedLocation && selectedLocation.value) {
+      fetch(`${url}/search/${selectedLocation.value}/${selectedType && selectedType.value ? selectedType.value : 'all'}`)
+      .then((resp) => resp.json())
+      .then((res)=> {
+          this.setState({cabList: [...res.data]});
+        });
+    } else {
+      alert('You have to put location');
+    }
+  }
+  async save() {
+    fetch(`${url}/save`, {
+      method: 'POST',
+      mode: 'cors',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify(this.state.cabList)
+    }).then((e)=> alert('Success'));
+  }
   render() {
+    const {selectedType, cabList} = this.state;
     return <Container>
+      <br/>
       <Row>
-        <Col xs={1}>
-          S
-        </Col>
         <Col xs={6}>
-          <CreatableSelect
-            isClearable
-            onChange={handleChange}
-            onInputChange={(v)=>{this.location(v)}}
-            options={this.state.locations}
-          />
           <AsyncSelect
+            isClearable
             cacheOptions
-            loadOptions={loadOptions}
+            loadOptions={this.loadOptions}
             defaultOptions
-            onInputChange={this.handleInputChange}
+            onChange={this.changeLocation}
             />
         </Col>
         <Col xs={3}>
-          <CreatableSelect
+          <Select
             isClearable
-            onChange={handleChange}
-            onInputChange={handleInputChange}
+            value={selectedType}
+            onChange={this.changeType}
             options={filter}
           />
         </Col>
         <Col xs={2}>
-          <Button variant="outline-secondary">Search</Button>
+          <Button onClick={()=> {this.search()}} variant="outline-secondary">Search</Button>
         </Col>
       </Row>
+      <br/>
       <Row>
-        <Col>
+        <Col xs={10}>
           <ListGroup>
-            <ListGroup.Item>Cras justo odio</ListGroup.Item>
-            <ListGroup.Item>Dapibus ac facilisis in</ListGroup.Item>
-            <ListGroup.Item>Morbi leo risus</ListGroup.Item>
-            <ListGroup.Item>Porta ac consectetur ac</ListGroup.Item>
-            <ListGroup.Item>Vestibulum at eros</ListGroup.Item>
+            {
+              cabList.map((item, index) =>
+                <ListGroup.Item key={index}>{item.name} - {item.cabType}</ListGroup.Item>
+              )
+            }
           </ListGroup>
+        </Col>
+      </Row>
+      <br/>
+      <Row>
+        <Col xs={10} style={{textAlign:'center'}}>
+          <Button onClick={()=> {this.save()}} variant="outline-secondary">Save</Button>
         </Col>
       </Row>
     </Container>;
