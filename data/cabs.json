@@ -1,0 +1,34 @@
+[
+  {
+    "locationId": 1,
+    "name": "Aston Martin"
+  },
+  {
+    "locationId": 1,
+    "name": "Audi"
+  },
+  {
+    "locationId": 1,
+    "name": "BMW"
+  },
+  {
+    "locationId": 1,
+    "name": "Cadillac"
+  },
+  {
+    "locationId": 1,
+    "name": "Chevrolet"
+  },
+  {
+    "locationId": 1,
+    "name": "Datsun"
+  },
+  {
+    "locationId": 1,
+    "name": "Ferrari"
+  },
+  {
+    "locationId": 1,
+    "name": "Ford"
+  }
+]
