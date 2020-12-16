@@ -17,7 +17,7 @@ const filter = [
 class Cabs extends React.Component {
   constructor() {
     super(...arguments);
-    this.state = {locations: [], inputValue: '', cabList: [], selectedLocation: null, selectedType: null}; 
+    this.state = {cabList: [], selectedLocation: null, selectedType: null}; 
   }
   componentDidMount() {
     this.init();

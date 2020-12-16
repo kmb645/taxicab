@@ -20,7 +20,7 @@ app.get('/', function (req, res) {
   }
 })
 
-app.get('/location/:id', cors(), function (req, res, next) {
+app.get('/location/:id', (req, res) => {
   console.log('location--->', req.params.id);
   let location = fs.readFileSync('./data/location.json');
   location = JSON.parse(location);
@@ -30,24 +30,24 @@ app.get('/location/:id', cors(), function (req, res, next) {
   res.json({data: location })
 })
 
-app.get('/search/:location/:carType', cors(), function (req, res) {
-  let cabs = fs.readFileSync('./data/availableCabs.json');
-  cabs = JSON.parse(cabs);
-  cabs = cabs.filter((e)=> e.locationId == req.params.location)[0].cabs;
+app.get('/search/:location/:carType', (req, res) => {
+  let rng = 4;
+  let locations = fs.readFileSync('./data/location.json');
+  locations = JSON.parse(locations);
+  locations = locations.filter((e)=>e.id == req.params.location)[0];
+  let lat = locations.lat.slice(0, rng);
+  let lng = locations.lng.slice(0, rng);
+
   let allCabs = fs.readFileSync('./data/cabs.json');
   allCabs = JSON.parse(allCabs);
-  allCabs = allCabs.filter((e)=> cabs.includes(e.locationId));
+
+  allCabs = allCabs.filter((e)=> e.lat.slice(0,rng) == lat && e.lng.slice(0,rng) == lng);
   if(req.params.carType != 'all')
     allCabs = allCabs.filter((e)=> e.cabType == req.params.carType);
-  res.json({data: allCabs })
-})
-
-app.get('/list', (req, res, next) => {
-    res.json({msg: 'List'})
+  res.json({data:  allCabs})
 })
 
 app.post('/save', (req, res) => {
-  console.log(req.body);
   let data = JSON.stringify(req.body);
   fs.writeFileSync('data/output.json', data);
   res.json({satus: 'Success'})
