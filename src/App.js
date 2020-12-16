@@ -76,7 +76,7 @@ class Cabs extends React.Component {
     return <Container>
       <br/>
       <Row>
-        <Col xs={6}>
+        <Col xs={7}>
           <AsyncSelect
             isClearable
             cacheOptions
@@ -112,7 +112,7 @@ class Cabs extends React.Component {
       <br/>
       <Row>
         <Col xs={10} style={{textAlign:'center'}}>
-          <Button onClick={()=> {this.save()}} variant="outline-secondary">Save</Button>
+          <Button onClick={()=> {this.save()}} variant="success">Save</Button>
         </Col>
       </Row>
     </Container>;

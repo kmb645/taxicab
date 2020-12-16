@@ -1,12 +1,42 @@
 [
   {
     "locationId": 1,
-    "name": "Aston Martin",
+    "name": "Abarth",
     "cabType": "normal" 
   },
   {
     "locationId": 2,
+    "name": "Acura",
+    "cabType": "premium"
+  },
+  {
+    "locationId": 3,
+    "name": "Alfa Romeo",
+    "cabType": "normal" 
+  },
+  {
+    "locationId": 4,
+    "name": "Aston Martin",
+    "cabType": "premium"
+  },
+  {
+    "locationId": 5,
     "name": "Audi",
+    "cabType": "premium"
+  },
+  {
+    "locationId": 1,
+    "name": "Bentley",
+    "cabType": "normal" 
+  },
+  {
+    "locationId": 2,
+    "name": "BMW",
+    "cabType": "premium"
+  },
+  {
+    "locationId": 2,
+    "name": "Buick",
     "cabType": "premium"
   }
 ]

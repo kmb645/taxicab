@@ -30,8 +30,7 @@ app.get('/location/:id', cors(), function (req, res, next) {
   res.json({data: location })
 })
 
-app.get('/search/:location/:carType', cors(), function (req, res, next) {
-  console.log('location--->', req.params);
+app.get('/search/:location/:carType', cors(), function (req, res) {
   let cabs = fs.readFileSync('./data/availableCabs.json');
   cabs = JSON.parse(cabs);
   cabs = cabs.filter((e)=> e.locationId == req.params.location)[0].cabs;
